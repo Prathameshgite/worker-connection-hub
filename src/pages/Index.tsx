@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -473,7 +474,7 @@ const Index = () => {
       <footer className="bg-white">
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
           <p className="text-center text-sm text-gray-500">
-            © 2023 Smart Services. All rights reserved.
+            © 2025 Smart Services. All rights reserved.
           </p>
         </div>
       </footer>

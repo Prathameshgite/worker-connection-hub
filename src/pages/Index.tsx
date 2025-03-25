@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -104,16 +103,13 @@ const Index = () => {
     reviews: []
   });
 
-  // Initialize filtered workers on component mount
   useEffect(() => {
     setFilteredWorkers(workers);
   }, [workers]);
 
-  // Handle search and filter
   useEffect(() => {
     let results = workers;
     
-    // Filter by search term
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
       results = results.filter(worker => 
@@ -122,7 +118,6 @@ const Index = () => {
       );
     }
     
-    // Filter by location
     if (selectedLocation !== 'All') {
       results = results.filter(worker => worker.location === selectedLocation);
     }
@@ -130,13 +125,11 @@ const Index = () => {
     setFilteredWorkers(results);
   }, [searchTerm, selectedLocation, workers]);
 
-  // Handle input changes for new worker form
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewWorker({ ...newWorker, [name]: value });
   };
 
-  // Add a new worker
   const handleAddWorker = (e) => {
     e.preventDefault();
     const newId = workers.length > 0 ? Math.max(...workers.map(w => w.id)) + 1 : 1;
@@ -153,7 +146,6 @@ const Index = () => {
       description: `${newWorker.name} has been added to the directory.`,
     });
     
-    // Reset form
     setNewWorker({
       name: '',
       profession: '',
@@ -166,7 +158,6 @@ const Index = () => {
     setShowAddForm(false);
   };
 
-  // Delete a worker
   const handleDeleteWorker = (id) => {
     setWorkers(workers.filter(worker => worker.id !== id));
     toast({
@@ -175,15 +166,12 @@ const Index = () => {
     });
   };
 
-  // Handle adding a new review
   const handleAddReview = (workerId, review) => {
     const updatedWorkers = workers.map(worker => {
       if (worker.id === workerId) {
-        // Calculate new average rating
         const allRatings = [...worker.reviews.map(r => r.rating), review.rating];
         const avgRating = allRatings.reduce((sum, rating) => sum + rating, 0) / allRatings.length;
         
-        // Add the new review with a unique ID
         const newReview = {
           ...review,
           id: worker.reviews.length > 0 ? Math.max(...worker.reviews.map(r => r.id)) + 1 : 1,
@@ -208,13 +196,11 @@ const Index = () => {
     setSelectedWorker(null);
   };
 
-  // Open reviews modal
   const openReviews = (worker) => {
     setSelectedWorker(worker);
     setShowReviews(true);
   };
 
-  // Generate star rating display
   const renderStars = (rating) => {
     const stars = [];
     const fullStars = Math.floor(rating);
@@ -233,22 +219,18 @@ const Index = () => {
     return <div className="flex items-center">{stars} <span className="ml-1 text-gray-600">({rating})</span></div>;
   };
 
-  // Get all unique locations for filter dropdown
   const locations = ['All', ...new Set(workers.map(worker => worker.location))];
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Header */}
       <header className="bg-white shadow">
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold text-gray-900">Worker Connection Hub</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Smart Services</h1>
           <p className="mt-1 text-sm text-gray-600">Find skilled professionals for your projects</p>
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        {/* Search and Filters */}
         <div className="bg-white overflow-hidden shadow rounded-lg mb-6">
           <div className="px-4 py-5 sm:p-6">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -291,104 +273,100 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Add Worker Form */}
-        {showAddForm && (
-          <Card className="mb-6">
-            <CardContent className="pt-6">
-              <h2 className="text-lg font-medium text-gray-900 mb-4">Add New Worker</h2>
-              <form onSubmit={handleAddWorker}>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      required
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                      value={newWorker.name}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="profession" className="block text-sm font-medium text-gray-700">Profession</label>
-                    <input
-                      type="text"
-                      id="profession"
-                      name="profession"
-                      required
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                      value={newWorker.profession}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="location" className="block text-sm font-medium text-gray-700">Location</label>
-                    <input
-                      type="text"
-                      id="location"
-                      name="location"
-                      required
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                      value={newWorker.location}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone</label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                      value={newWorker.phone}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                      value={newWorker.email}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="rating" className="block text-sm font-medium text-gray-700">Rating (1-5)</label>
-                    <input
-                      type="number"
-                      id="rating"
-                      name="rating"
-                      min="1"
-                      max="5"
-                      step="0.1"
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                      value={newWorker.rating}
-                      onChange={handleInputChange}
-                    />
-                  </div>
+        <Card className="mb-6">
+          <CardContent className="pt-6">
+            <h2 className="text-lg font-medium text-gray-900">Add New Worker</h2>
+            <form onSubmit={handleAddWorker}>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    value={newWorker.name}
+                    onChange={handleInputChange}
+                  />
                 </div>
-                <div className="mt-4 flex justify-end space-x-3">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => setShowAddForm(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button type="submit">
-                    Add Worker
-                  </Button>
+                <div>
+                  <label htmlFor="profession" className="block text-sm font-medium text-gray-700">Profession</label>
+                  <input
+                    type="text"
+                    id="profession"
+                    name="profession"
+                    required
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    value={newWorker.profession}
+                    onChange={handleInputChange}
+                  />
                 </div>
-              </form>
-            </CardContent>
-          </Card>
-        )}
+                <div>
+                  <label htmlFor="location" className="block text-sm font-medium text-gray-700">Location</label>
+                  <input
+                    type="text"
+                    id="location"
+                    name="location"
+                    required
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    value={newWorker.location}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    value={newWorker.phone}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    value={newWorker.email}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="rating" className="block text-sm font-medium text-gray-700">Rating (1-5)</label>
+                  <input
+                    type="number"
+                    id="rating"
+                    name="rating"
+                    min="1"
+                    max="5"
+                    step="0.1"
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    value={newWorker.rating}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </div>
+              <div className="mt-4 flex justify-end space-x-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setShowAddForm(false)}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit">
+                  Add Worker
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
 
-        {/* Workers Grid */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filteredWorkers.map(worker => (
             <Card key={worker.id} className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
@@ -464,7 +442,6 @@ const Index = () => {
           ))}
         </div>
 
-        {/* No Results */}
         {filteredWorkers.length === 0 && (
           <div className="text-center py-12">
             <p className="text-lg text-gray-600">No workers found matching your criteria</p>
@@ -481,7 +458,6 @@ const Index = () => {
           </div>
         )}
 
-        {/* Reviews Modal */}
         {showReviews && selectedWorker && (
           <WorkerReviews 
             worker={selectedWorker}
@@ -494,11 +470,10 @@ const Index = () => {
         )}
       </main>
 
-      {/* Footer */}
       <footer className="bg-white">
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
           <p className="text-center text-sm text-gray-500">
-            © 2023 Worker Connection Hub. All rights reserved.
+            © 2023 Smart Services. All rights reserved.
           </p>
         </div>
       </footer>

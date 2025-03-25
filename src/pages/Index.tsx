@@ -3,29 +3,105 @@ import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { WorkerReviews } from "@/components/WorkerReviews";
+import { Star, StarHalf } from "lucide-react";
 
 const Index = () => {
   const { toast } = useToast();
   const [workers, setWorkers] = useState([
-    { id: 1, name: 'John Smith', profession: 'Plumber', location: 'New York', rating: 4.8, phone: '555-123-4567', email: 'john@example.com' },
-    { id: 2, name: 'Maria Garcia', profession: 'Electrician', location: 'Chicago', rating: 4.9, phone: '555-234-5678', email: 'maria@example.com' },
-    { id: 3, name: 'David Lee', profession: 'Carpenter', location: 'Los Angeles', rating: 4.7, phone: '555-345-6789', email: 'david@example.com' },
-    { id: 4, name: 'Sarah Johnson', profession: 'Painter', location: 'Houston', rating: 4.5, phone: '555-456-7890', email: 'sarah@example.com' },
-    { id: 5, name: 'Michael Brown', profession: 'HVAC Technician', location: 'Phoenix', rating: 4.6, phone: '555-567-8901', email: 'michael@example.com' },
-    { id: 6, name: 'Emily Wilson', profession: 'Landscaper', location: 'Philadelphia', rating: 4.8, phone: '555-678-9012', email: 'emily@example.com' }
+    { 
+      id: 1, 
+      name: 'John Smith', 
+      profession: 'Plumber', 
+      location: 'New York', 
+      rating: 4.8, 
+      phone: '555-123-4567', 
+      email: 'john@example.com',
+      reviews: [
+        { id: 1, userName: 'Alice Johnson', rating: 5, comment: 'Excellent work, fixed my sink in no time!', date: '2023-05-15' },
+        { id: 2, userName: 'Bob Williams', rating: 4.5, comment: 'Very professional and reasonably priced.', date: '2023-04-22' }
+      ]
+    },
+    { 
+      id: 2, 
+      name: 'Maria Garcia', 
+      profession: 'Electrician', 
+      location: 'Chicago', 
+      rating: 4.9, 
+      phone: '555-234-5678', 
+      email: 'maria@example.com',
+      reviews: [
+        { id: 1, userName: 'Chris Evans', rating: 5, comment: 'Fantastic work rewiring my home office.', date: '2023-06-10' },
+        { id: 2, userName: 'Diana Prince', rating: 4.8, comment: 'Very knowledgeable and efficient.', date: '2023-05-28' }
+      ]
+    },
+    { 
+      id: 3, 
+      name: 'David Lee', 
+      profession: 'Carpenter', 
+      location: 'Los Angeles', 
+      rating: 4.7, 
+      phone: '555-345-6789', 
+      email: 'david@example.com',
+      reviews: [
+        { id: 1, userName: 'Frank Castle', rating: 4.5, comment: 'Built a beautiful custom bookshelf for my living room.', date: '2023-04-15' }
+      ]
+    },
+    { 
+      id: 4, 
+      name: 'Sarah Johnson', 
+      profession: 'Painter', 
+      location: 'Houston', 
+      rating: 4.5, 
+      phone: '555-456-7890', 
+      email: 'sarah@example.com',
+      reviews: [
+        { id: 1, userName: 'George Banks', rating: 4.5, comment: 'Great attention to detail and clean work.', date: '2023-03-20' },
+        { id: 2, userName: 'Hannah Montana', rating: 4.5, comment: 'Very pleased with the quality of work.', date: '2023-02-18' }
+      ]
+    },
+    { 
+      id: 5, 
+      name: 'Michael Brown', 
+      profession: 'HVAC Technician', 
+      location: 'Phoenix', 
+      rating: 4.6, 
+      phone: '555-567-8901', 
+      email: 'michael@example.com',
+      reviews: [
+        { id: 1, userName: 'Ian Malcolm', rating: 4.8, comment: 'Fixed my AC during a heatwave, lifesaver!', date: '2023-07-02' },
+        { id: 2, userName: 'Julia Roberts', rating: 4.3, comment: 'Good service but arrived a bit late.', date: '2023-06-15' }
+      ]
+    },
+    { 
+      id: 6, 
+      name: 'Emily Wilson', 
+      profession: 'Landscaper', 
+      location: 'Philadelphia', 
+      rating: 4.8, 
+      phone: '555-678-9012', 
+      email: 'emily@example.com',
+      reviews: [
+        { id: 1, userName: 'Kevin Hart', rating: 5, comment: 'Transformed my backyard into something from a magazine!', date: '2023-05-10' },
+        { id: 2, userName: 'Liam Neeson', rating: 4.6, comment: 'Great design ideas and implementation.', date: '2023-04-25' }
+      ]
+    }
   ]);
   
   const [filteredWorkers, setFilteredWorkers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLocation, setSelectedLocation] = useState('All');
   const [showAddForm, setShowAddForm] = useState(false);
+  const [selectedWorker, setSelectedWorker] = useState(null);
+  const [showReviews, setShowReviews] = useState(false);
   const [newWorker, setNewWorker] = useState({
     name: '',
     profession: '',
     location: '',
     phone: '',
     email: '',
-    rating: 4.0
+    rating: 4.0,
+    reviews: []
   });
 
   // Initialize filtered workers on component mount
@@ -67,7 +143,8 @@ const Index = () => {
     const workerToAdd = { 
       ...newWorker, 
       id: newId, 
-      rating: parseFloat(newWorker.rating.toString()) || 4.0 
+      rating: parseFloat(newWorker.rating.toString()) || 4.0,
+      reviews: []
     };
     
     setWorkers([...workers, workerToAdd]);
@@ -83,7 +160,8 @@ const Index = () => {
       location: '',
       phone: '',
       email: '',
-      rating: 4.0
+      rating: 4.0,
+      reviews: []
     });
     setShowAddForm(false);
   };
@@ -97,8 +175,44 @@ const Index = () => {
     });
   };
 
-  // Get all unique locations for filter dropdown
-  const locations = ['All', ...new Set(workers.map(worker => worker.location))];
+  // Handle adding a new review
+  const handleAddReview = (workerId, review) => {
+    const updatedWorkers = workers.map(worker => {
+      if (worker.id === workerId) {
+        // Calculate new average rating
+        const allRatings = [...worker.reviews.map(r => r.rating), review.rating];
+        const avgRating = allRatings.reduce((sum, rating) => sum + rating, 0) / allRatings.length;
+        
+        // Add the new review with a unique ID
+        const newReview = {
+          ...review,
+          id: worker.reviews.length > 0 ? Math.max(...worker.reviews.map(r => r.id)) + 1 : 1,
+          date: new Date().toISOString().slice(0, 10)
+        };
+        
+        return {
+          ...worker,
+          reviews: [...worker.reviews, newReview],
+          rating: parseFloat(avgRating.toFixed(1))
+        };
+      }
+      return worker;
+    });
+    
+    setWorkers(updatedWorkers);
+    toast({
+      title: "Review Added",
+      description: "Your review has been submitted. Thank you for your feedback!",
+    });
+    setShowReviews(false);
+    setSelectedWorker(null);
+  };
+
+  // Open reviews modal
+  const openReviews = (worker) => {
+    setSelectedWorker(worker);
+    setShowReviews(true);
+  };
 
   // Generate star rating display
   const renderStars = (rating) => {
@@ -108,16 +222,19 @@ const Index = () => {
     
     for (let i = 1; i <= 5; i++) {
       if (i <= fullStars) {
-        stars.push(<span key={i} className="text-yellow-400">★</span>);
+        stars.push(<Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />);
       } else if (i === fullStars + 1 && hasHalfStar) {
-        stars.push(<span key={i} className="text-yellow-400">★</span>);
+        stars.push(<StarHalf key={i} className="h-4 w-4 text-yellow-400 fill-current" />);
       } else {
-        stars.push(<span key={i} className="text-gray-300">★</span>);
+        stars.push(<Star key={i} className="h-4 w-4 text-gray-300" />);
       }
     }
     
-    return <div className="flex">{stars} <span className="ml-1 text-gray-600">({rating})</span></div>;
+    return <div className="flex items-center">{stars} <span className="ml-1 text-gray-600">({rating})</span></div>;
   };
+
+  // Get all unique locations for filter dropdown
+  const locations = ['All', ...new Set(workers.map(worker => worker.location))];
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -288,7 +405,15 @@ const Index = () => {
                     </button>
                   </div>
                   <p className="text-sm text-blue-600 font-medium">{worker.profession}</p>
-                  <div className="mt-1">{renderStars(worker.rating)}</div>
+                  <div className="mt-1 flex justify-between items-center">
+                    {renderStars(worker.rating)}
+                    <button 
+                      onClick={() => openReviews(worker)}
+                      className="text-sm text-blue-600 hover:text-blue-800 flex items-center"
+                    >
+                      Reviews ({worker.reviews.length})
+                    </button>
+                  </div>
                 </div>
                 <div className="px-4 py-3 bg-gray-50">
                   <div className="grid grid-cols-1 gap-1">
@@ -312,10 +437,10 @@ const Index = () => {
                       <span className="ml-2 text-sm text-gray-600">{worker.email}</span>
                     </div>
                   </div>
-                  <div className="mt-3">
+                  <div className="mt-3 flex space-x-2">
                     <Button
                       variant="outline"
-                      className="w-full text-sm"
+                      className="flex-1 text-sm"
                       onClick={() => {
                         toast({
                           title: "Contact Sent",
@@ -323,7 +448,14 @@ const Index = () => {
                         });
                       }}
                     >
-                      Contact Now
+                      Contact
+                    </Button>
+                    <Button
+                      variant="default"
+                      className="flex-1 text-sm"
+                      onClick={() => openReviews(worker)}
+                    >
+                      Review
                     </Button>
                   </div>
                 </div>
@@ -347,6 +479,18 @@ const Index = () => {
               Clear Filters
             </Button>
           </div>
+        )}
+
+        {/* Reviews Modal */}
+        {showReviews && selectedWorker && (
+          <WorkerReviews 
+            worker={selectedWorker}
+            onClose={() => {
+              setShowReviews(false);
+              setSelectedWorker(null);
+            }}
+            onAddReview={(review) => handleAddReview(selectedWorker.id, review)}
+          />
         )}
       </main>
 

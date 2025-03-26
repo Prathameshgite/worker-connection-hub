@@ -11,79 +11,79 @@ const Index = () => {
   const [workers, setWorkers] = useState([
     { 
       id: 1, 
-      name: 'John Smith', 
+      name: 'Rajesh Kumar', 
       profession: 'Plumber', 
-      location: 'New York', 
+      location: 'Mumbai', 
       rating: 4.8, 
-      phone: '555-123-4567', 
-      email: 'john@example.com',
+      phone: '98765-43210', 
+      email: 'rajesh@example.com',
       reviews: [
-        { id: 1, userName: 'Alice Johnson', rating: 5, comment: 'Excellent work, fixed my sink in no time!', date: '2023-05-15' },
-        { id: 2, userName: 'Bob Williams', rating: 4.5, comment: 'Very professional and reasonably priced.', date: '2023-04-22' }
+        { id: 1, userName: 'Ananya Sharma', rating: 5, comment: 'Excellent work, fixed my sink in no time!', date: '2023-05-15' },
+        { id: 2, userName: 'Vikram Singh', rating: 4.5, comment: 'Very professional and reasonably priced.', date: '2023-04-22' }
       ]
     },
     { 
       id: 2, 
-      name: 'Maria Garcia', 
+      name: 'Priya Patel', 
       profession: 'Electrician', 
-      location: 'Chicago', 
+      location: 'Delhi', 
       rating: 4.9, 
-      phone: '555-234-5678', 
-      email: 'maria@example.com',
+      phone: '87654-32109', 
+      email: 'priya@example.com',
       reviews: [
-        { id: 1, userName: 'Chris Evans', rating: 5, comment: 'Fantastic work rewiring my home office.', date: '2023-06-10' },
-        { id: 2, userName: 'Diana Prince', rating: 4.8, comment: 'Very knowledgeable and efficient.', date: '2023-05-28' }
+        { id: 1, userName: 'Arjun Mehta', rating: 5, comment: 'Fantastic work rewiring my home office.', date: '2023-06-10' },
+        { id: 2, userName: 'Deepika Reddy', rating: 4.8, comment: 'Very knowledgeable and efficient.', date: '2023-05-28' }
       ]
     },
     { 
       id: 3, 
-      name: 'David Lee', 
+      name: 'Suresh Iyer', 
       profession: 'Carpenter', 
-      location: 'Los Angeles', 
+      location: 'Bangalore', 
       rating: 4.7, 
-      phone: '555-345-6789', 
-      email: 'david@example.com',
+      phone: '76543-21098', 
+      email: 'suresh@example.com',
       reviews: [
-        { id: 1, userName: 'Frank Castle', rating: 4.5, comment: 'Built a beautiful custom bookshelf for my living room.', date: '2023-04-15' }
+        { id: 1, userName: 'Ravi Verma', rating: 4.5, comment: 'Built a beautiful custom bookshelf for my living room.', date: '2023-04-15' }
       ]
     },
     { 
       id: 4, 
-      name: 'Sarah Johnson', 
+      name: 'Meera Gupta', 
       profession: 'Painter', 
-      location: 'Houston', 
+      location: 'Chennai', 
       rating: 4.5, 
-      phone: '555-456-7890', 
-      email: 'sarah@example.com',
+      phone: '65432-10987', 
+      email: 'meera@example.com',
       reviews: [
-        { id: 1, userName: 'George Banks', rating: 4.5, comment: 'Great attention to detail and clean work.', date: '2023-03-20' },
-        { id: 2, userName: 'Hannah Montana', rating: 4.5, comment: 'Very pleased with the quality of work.', date: '2023-02-18' }
+        { id: 1, userName: 'Karthik Nair', rating: 4.5, comment: 'Great attention to detail and clean work.', date: '2023-03-20' },
+        { id: 2, userName: 'Nisha Joshi', rating: 4.5, comment: 'Very pleased with the quality of work.', date: '2023-02-18' }
       ]
     },
     { 
       id: 5, 
-      name: 'Michael Brown', 
+      name: 'Amit Sharma', 
       profession: 'HVAC Technician', 
-      location: 'Phoenix', 
+      location: 'Hyderabad', 
       rating: 4.6, 
-      phone: '555-567-8901', 
-      email: 'michael@example.com',
+      phone: '54321-09876', 
+      email: 'amit@example.com',
       reviews: [
-        { id: 1, userName: 'Ian Malcolm', rating: 4.8, comment: 'Fixed my AC during a heatwave, lifesaver!', date: '2023-07-02' },
-        { id: 2, userName: 'Julia Roberts', rating: 4.3, comment: 'Good service but arrived a bit late.', date: '2023-06-15' }
+        { id: 1, userName: 'Sanjay Kapoor', rating: 4.8, comment: 'Fixed my AC during a heatwave, lifesaver!', date: '2023-07-02' },
+        { id: 2, userName: 'Pooja Malhotra', rating: 4.3, comment: 'Good service but arrived a bit late.', date: '2023-06-15' }
       ]
     },
     { 
       id: 6, 
-      name: 'Emily Wilson', 
+      name: 'Kavita Desai', 
       profession: 'Landscaper', 
-      location: 'Philadelphia', 
+      location: 'Pune', 
       rating: 4.8, 
-      phone: '555-678-9012', 
-      email: 'emily@example.com',
+      phone: '43210-98765', 
+      email: 'kavita@example.com',
       reviews: [
-        { id: 1, userName: 'Kevin Hart', rating: 5, comment: 'Transformed my backyard into something from a magazine!', date: '2023-05-10' },
-        { id: 2, userName: 'Liam Neeson', rating: 4.6, comment: 'Great design ideas and implementation.', date: '2023-04-25' }
+        { id: 1, userName: 'Rahul Khanna', rating: 5, comment: 'Transformed my garden into something beautiful!', date: '2023-05-10' },
+        { id: 2, userName: 'Aisha Choudhary', rating: 4.6, comment: 'Great design ideas and implementation.', date: '2023-04-25' }
       ]
     }
   ]);

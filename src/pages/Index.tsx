@@ -5,7 +5,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { WorkerReviews } from "@/components/WorkerReviews";
-import { Link } from "react-router-dom";
 
 const Index = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -87,11 +86,6 @@ const Index = () => {
     <div className="container mx-auto py-8 px-4">
       <div className="flex flex-col md:flex-row justify-between items-center mb-8">
         <h1 className="text-3xl font-bold mb-4 md:mb-0">Service Providers in Pune</h1>
-        <Link to="/workflow">
-          <Button variant="outline" className="mb-4 md:mb-0">
-            View Project Workflow
-          </Button>
-        </Link>
       </div>
       
       <div className="mb-6">

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -13,7 +12,7 @@ const Index = () => {
       id: 1, 
       name: 'Rajesh Kumar', 
       profession: 'Plumber', 
-      location: 'Mumbai', 
+      location: 'Koregaon Park, Pune', 
       rating: 4.8, 
       phone: '98765-43210', 
       email: 'rajesh@example.com',
@@ -26,7 +25,7 @@ const Index = () => {
       id: 2, 
       name: 'Priya Patel', 
       profession: 'Electrician', 
-      location: 'Delhi', 
+      location: 'Kothrud, Pune', 
       rating: 4.9, 
       phone: '87654-32109', 
       email: 'priya@example.com',
@@ -39,7 +38,7 @@ const Index = () => {
       id: 3, 
       name: 'Suresh Iyer', 
       profession: 'Carpenter', 
-      location: 'Bangalore', 
+      location: 'Aundh, Pune', 
       rating: 4.7, 
       phone: '76543-21098', 
       email: 'suresh@example.com',
@@ -51,7 +50,7 @@ const Index = () => {
       id: 4, 
       name: 'Meera Gupta', 
       profession: 'Painter', 
-      location: 'Chennai', 
+      location: 'Viman Nagar, Pune', 
       rating: 4.5, 
       phone: '65432-10987', 
       email: 'meera@example.com',
@@ -64,7 +63,7 @@ const Index = () => {
       id: 5, 
       name: 'Amit Sharma', 
       profession: 'HVAC Technician', 
-      location: 'Hyderabad', 
+      location: 'Kalyani Nagar, Pune', 
       rating: 4.6, 
       phone: '54321-09876', 
       email: 'amit@example.com',
@@ -77,7 +76,7 @@ const Index = () => {
       id: 6, 
       name: 'Kavita Desai', 
       profession: 'Landscaper', 
-      location: 'Pune', 
+      location: 'Baner, Pune', 
       rating: 4.8, 
       phone: '43210-98765', 
       email: 'kavita@example.com',

@@ -57,7 +57,7 @@ const Index = () => {
       phone: '97654-00123',
       email: 'anita@example.com',
       reviews: [
-        { reviewer: 'Rohan', rating: 5, comment: 'Fantastic painting job, very clean and professional.' },
+        { reviewer: ' Rohan', rating: 5, comment: 'Fantastic painting job, very clean and professional.' },
         { reviewer: 'Meera', rating: 4.8, comment: 'Excellent attention to detail.' }
       ]
     },
@@ -70,7 +70,7 @@ const Index = () => {
       phone: '99700-67890',
       email: 'deepak@example.com',
       reviews: [
-        { reviewer: 'Sameer', rating: 4.5, comment: 'Good mechanic, fixed my car quickly.' },
+        { reviewer: ' Sameer', rating: 4.5, comment: 'Good mechanic, fixed my car quickly.' },
         { reviewer: 'Neha', rating: 4.7, comment: 'Reliable and trustworthy mechanic.' }
       ]
     }

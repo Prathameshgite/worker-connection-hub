@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,22 +8,42 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { Facebook, Mail } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+  const { login, loginWithProvider } = useAuth();
   
-  const handleSubmit = (e: React.FormEvent) => {
+  // Get the redirect path from location state, or default to "/"
+  const from = location.state?.from?.pathname || "/";
+  
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, this would validate and authenticate the user
-    toast.success(isLogin ? "Successfully logged in!" : "Account created successfully!");
-    navigate("/");
+    try {
+      await login(email, password);
+      toast.success(isLogin ? "Successfully logged in!" : "Account created successfully!");
+      // Navigate to the redirect path
+      navigate(from, { replace: true });
+    } catch (error) {
+      toast.error("Login failed. Please check your credentials.");
+      console.error("Login error:", error);
+    }
   };
   
-  const handleSocialLogin = (provider: string) => {
-    // In a real app, this would handle social login
-    toast.success(`Logged in with ${provider}`);
-    navigate("/");
+  const handleSocialLogin = async (provider: string) => {
+    try {
+      await loginWithProvider(provider);
+      toast.success(`Logged in with ${provider}`);
+      // Navigate to the redirect path
+      navigate(from, { replace: true });
+    } catch (error) {
+      toast.error(`${provider} login failed.`);
+      console.error(`${provider} login error:`, error);
+    }
   };
 
   return (
@@ -48,12 +68,26 @@ const Login = () => {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="your@email.com" required />
+                <Input 
+                  id="email" 
+                  type="email" 
+                  placeholder="your@email.com" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required 
+                />
               </div>
               
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" placeholder="••••••••" required />
+                <Input 
+                  id="password" 
+                  type="password" 
+                  placeholder="••••••••" 
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required 
+                />
               </div>
               
               {!isLogin && (

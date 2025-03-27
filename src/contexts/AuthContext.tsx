@@ -1,6 +1,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { toast } from "sonner";
 
 type User = {
   id: string;
@@ -22,6 +23,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User>(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Check if user is logged in when the component mounts
   useEffect(() => {
@@ -37,31 +39,53 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = async (email: string, password: string) => {
-    // In a real app, you would validate credentials with a backend
-    // This is a mock implementation
-    const mockUser = {
-      id: "user-123",
-      email,
-      name: email.split('@')[0],
-    };
-    
-    setUser(mockUser);
-    localStorage.setItem("user", JSON.stringify(mockUser));
-    navigate("/");
+    try {
+      // In a real app, you would validate credentials with a backend
+      // This is a mock implementation
+      const mockUser = {
+        id: "user-123",
+        email,
+        name: email.split('@')[0],
+      };
+      
+      setUser(mockUser);
+      localStorage.setItem("user", JSON.stringify(mockUser));
+      
+      // Get redirect path or default to home
+      const from = location.state?.from?.pathname || "/";
+      navigate(from, { replace: true });
+      
+      return Promise.resolve();
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error("Failed to login. Please try again.");
+      return Promise.reject(error);
+    }
   };
 
   const loginWithProvider = async (provider: string) => {
-    // In a real app, this would integrate with Google/Facebook OAuth
-    // This is a mock implementation
-    const mockUser = {
-      id: `${provider.toLowerCase()}-user-123`,
-      email: `user@${provider.toLowerCase()}.com`,
-      name: `${provider} User`,
-    };
-    
-    setUser(mockUser);
-    localStorage.setItem("user", JSON.stringify(mockUser));
-    navigate("/");
+    try {
+      // In a real app, this would integrate with Google/Facebook OAuth
+      // This is a mock implementation
+      const mockUser = {
+        id: `${provider.toLowerCase()}-user-123`,
+        email: `user@${provider.toLowerCase()}.com`,
+        name: `${provider} User`,
+      };
+      
+      setUser(mockUser);
+      localStorage.setItem("user", JSON.stringify(mockUser));
+      
+      // Get redirect path or default to home
+      const from = location.state?.from?.pathname || "/";
+      navigate(from, { replace: true });
+      
+      return Promise.resolve();
+    } catch (error) {
+      console.error(`${provider} login error:`, error);
+      toast.error(`Failed to login with ${provider}. Please try again.`);
+      return Promise.reject(error);
+    }
   };
 
   const logout = () => {

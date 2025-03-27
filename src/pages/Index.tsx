@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { WorkerReviews } from "@/components/WorkerReviews";
-import { Star, StarHalf } from "lucide-react";
+import { Star, StarHalf, Search, MapPin } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   const { toast } = useToast();
@@ -89,19 +90,9 @@ const Index = () => {
   
   const [filteredWorkers, setFilteredWorkers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedLocation, setSelectedLocation] = useState('All');
-  const [showAddForm, setShowAddForm] = useState(false);
+  const [location, setLocation] = useState('');
   const [selectedWorker, setSelectedWorker] = useState(null);
   const [showReviews, setShowReviews] = useState(false);
-  const [newWorker, setNewWorker] = useState({
-    name: '',
-    profession: '',
-    location: '',
-    phone: '',
-    email: '',
-    rating: 4.0,
-    reviews: []
-  });
 
   useEffect(() => {
     setFilteredWorkers(workers);
@@ -118,45 +109,15 @@ const Index = () => {
       );
     }
     
-    if (selectedLocation !== 'All') {
-      results = results.filter(worker => worker.location === selectedLocation);
+    if (location) {
+      const locationTerm = location.toLowerCase();
+      results = results.filter(worker => 
+        worker.location.toLowerCase().includes(locationTerm)
+      );
     }
     
     setFilteredWorkers(results);
-  }, [searchTerm, selectedLocation, workers]);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewWorker({ ...newWorker, [name]: value });
-  };
-
-  const handleAddWorker = (e) => {
-    e.preventDefault();
-    const newId = workers.length > 0 ? Math.max(...workers.map(w => w.id)) + 1 : 1;
-    const workerToAdd = { 
-      ...newWorker, 
-      id: newId, 
-      rating: parseFloat(newWorker.rating.toString()) || 4.0,
-      reviews: []
-    };
-    
-    setWorkers([...workers, workerToAdd]);
-    toast({
-      title: "Worker Added",
-      description: `${newWorker.name} has been added to the directory.`,
-    });
-    
-    setNewWorker({
-      name: '',
-      profession: '',
-      location: '',
-      phone: '',
-      email: '',
-      rating: 4.0,
-      reviews: []
-    });
-    setShowAddForm(false);
-  };
+  }, [searchTerm, location, workers]);
 
   const handleDeleteWorker = (id) => {
     setWorkers(workers.filter(worker => worker.id !== id));
@@ -219,7 +180,32 @@ const Index = () => {
     return <div className="flex items-center">{stars} <span className="ml-1 text-gray-600">({rating})</span></div>;
   };
 
-  const locations = ['All', ...new Set(workers.map(worker => worker.location))];
+  const getCurrentLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          toast({
+            title: "Location Found",
+            description: "Using your current location to find nearby workers.",
+          });
+          setLocation("Current Location");
+        },
+        () => {
+          toast({
+            title: "Location Error",
+            description: "Unable to get your location. Please enter it manually.",
+            variant: "destructive"
+          });
+        }
+      );
+    } else {
+      toast({
+        title: "Location Not Supported",
+        description: "Your browser doesn't support geolocation services.",
+        variant: "destructive"
+      });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -247,125 +233,51 @@ const Index = () => {
               </div>
               <div>
                 <label htmlFor="location" className="block text-sm font-medium text-gray-700">Location</label>
-                <select
-                  id="location"
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  value={selectedLocation}
-                  onChange={(e) => setSelectedLocation(e.target.value)}
-                >
-                  {locations.map(location => (
-                    <option key={location} value={location}>{location}</option>
-                  ))}
-                </select>
+                <div className="mt-1 flex rounded-md shadow-sm">
+                  <input
+                    type="text"
+                    id="location"
+                    className="flex-grow block w-full border border-gray-300 rounded-l-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    placeholder="Enter location..."
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                  />
+                  <button 
+                    type="button"
+                    onClick={getCurrentLocation}
+                    className="inline-flex items-center px-3 py-2 border border-l-0 border-gray-300 rounded-r-md bg-gray-50 text-gray-500 sm:text-sm"
+                  >
+                    <MapPin className="h-4 w-4" />
+                  </button>
+                </div>
               </div>
             </div>
             <div className="mt-4 flex justify-between items-center">
               <div className="text-sm text-gray-600">
                 Showing {filteredWorkers.length} workers
               </div>
-              <Button 
-                variant="default"
-                onClick={() => setShowAddForm(true)}
-              >
-                Add New Worker
-              </Button>
+              <div className="flex space-x-2">
+                <Button 
+                  variant="default"
+                  onClick={() => {
+                    const results = workers;
+                    if (searchTerm || location) {
+                      setFilteredWorkers(results);
+                    }
+                  }}
+                >
+                  <Search className="mr-2 h-4 w-4" />
+                  Find
+                </Button>
+                <Link to="/add-worker">
+                  <Button variant="outline">
+                    Add New Worker
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
-
-        <Card className="mb-6">
-          <CardContent className="pt-6">
-            <h2 className="text-lg font-medium text-gray-900">Add New Worker</h2>
-            <form onSubmit={handleAddWorker}>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    required
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    value={newWorker.name}
-                    onChange={handleInputChange}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="profession" className="block text-sm font-medium text-gray-700">Profession</label>
-                  <input
-                    type="text"
-                    id="profession"
-                    name="profession"
-                    required
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    value={newWorker.profession}
-                    onChange={handleInputChange}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="location" className="block text-sm font-medium text-gray-700">Location</label>
-                  <input
-                    type="text"
-                    id="location"
-                    name="location"
-                    required
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    value={newWorker.location}
-                    onChange={handleInputChange}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone</label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    value={newWorker.phone}
-                    onChange={handleInputChange}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    value={newWorker.email}
-                    onChange={handleInputChange}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="rating" className="block text-sm font-medium text-gray-700">Rating (1-5)</label>
-                  <input
-                    type="number"
-                    id="rating"
-                    name="rating"
-                    min="1"
-                    max="5"
-                    step="0.1"
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    value={newWorker.rating}
-                    onChange={handleInputChange}
-                  />
-                </div>
-              </div>
-              <div className="mt-4 flex justify-end space-x-3">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setShowAddForm(false)}
-                >
-                  Cancel
-                </Button>
-                <Button type="submit">
-                  Add Worker
-                </Button>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filteredWorkers.map(worker => (
@@ -450,7 +362,7 @@ const Index = () => {
               className="mt-4"
               onClick={() => {
                 setSearchTerm('');
-                setSelectedLocation('All');
+                setLocation('');
               }}
             >
               Clear Filters

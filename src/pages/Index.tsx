@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { WorkerReviews } from "@/components/WorkerReviews";
 import PageLayout from "@/components/PageLayout";
@@ -24,6 +24,11 @@ const Index = () => {
   
   const [selectedWorker, setSelectedWorker] = useState<Worker | null>(null);
   const [showReviews, setShowReviews] = useState(false);
+
+  // Force a re-render when the component mounts
+  useEffect(() => {
+    console.log("Index page mounted, workers count:", filteredWorkers.length);
+  }, []);
 
   const openReviews = (worker: Worker) => {
     setSelectedWorker(worker);

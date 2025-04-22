@@ -7,11 +7,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MapPin, ArrowLeft } from "lucide-react";
 import { useWorkers } from "@/hooks/useWorkers";
+import { useAuth } from "@/contexts/AuthContext";
 
 const AddWorker = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const { addWorker } = useWorkers();
+  const { user } = useAuth();
   const [newWorker, setNewWorker] = useState({
     name: '',
     profession: '',
@@ -57,22 +59,16 @@ const AddWorker = () => {
   const handleAddWorker = (e) => {
     e.preventDefault();
     
-    // Create a new worker with a unique ID
-    const newId = Math.floor(Math.random() * 1000) + 1;
+    // Create a new worker with the authenticated user's ID
     const workerToAdd = { 
       ...newWorker, 
-      id: newId, 
+      id: user ? parseInt(user.id.replace(/\D/g, '')) : Math.floor(Math.random() * 1000) + 1, 
       rating: parseFloat(newWorker.rating.toString()) || 4.0,
       reviews: []
     };
     
     // Add the worker to the global state using the useWorkers hook
     addWorker(workerToAdd);
-    
-    toast({
-      title: "Worker Added",
-      description: `${newWorker.name} has been added to the directory.`,
-    });
     
     // Reset form
     setNewWorker({
@@ -85,8 +81,8 @@ const AddWorker = () => {
       reviews: []
     });
     
-    // Navigate back to main page
-    navigate('/');
+    // Force navigation back to main page
+    navigate('/', { replace: true });
   };
 
   return (

@@ -104,9 +104,14 @@ const defaultWorkers = [
 export const useWorkers = () => {
   const { toast } = useToast();
   const [workers, setWorkers] = useState<Worker[]>(() => {
-    const savedWorkers = localStorage.getItem('workers');
-    // If no saved workers, use default workers
-    return savedWorkers ? JSON.parse(savedWorkers) : defaultWorkers;
+    try {
+      const savedWorkers = localStorage.getItem('workers');
+      // If no saved workers, use default workers
+      return savedWorkers ? JSON.parse(savedWorkers) : defaultWorkers;
+    } catch (error) {
+      console.error("Error loading workers from localStorage:", error);
+      return defaultWorkers;
+    }
   });
   
   const [filteredWorkers, setFilteredWorkers] = useState<Worker[]>(workers);
@@ -115,11 +120,14 @@ export const useWorkers = () => {
 
   // Persist workers to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem('workers', JSON.stringify(workers));
-    // Update filteredWorkers whenever workers change
-    setFilteredWorkers(workers);
+    try {
+      localStorage.setItem('workers', JSON.stringify(workers));
+    } catch (error) {
+      console.error("Error saving workers to localStorage:", error);
+    }
   }, [workers]);
 
+  // Apply filters whenever search criteria or workers change
   useEffect(() => {
     let results = workers;
     
@@ -229,16 +237,26 @@ export const useWorkers = () => {
     // Ensure the new worker has a unique ID
     const newWorker = {
       ...worker,
-      id: workers.length > 0 ? Math.max(...workers.map(w => w.id)) + 1 : 1
+      id: worker.id || (workers.length > 0 ? Math.max(...workers.map(w => w.id)) + 1 : 1)
     };
     
-    // Add the worker and trigger re-render
-    setWorkers(prevWorkers => [...prevWorkers, newWorker]);
+    // Add the worker and force re-render by creating a new array
+    const updatedWorkers = [...workers, newWorker];
+    setWorkers(updatedWorkers);
+    
+    // Explicitly update filtered workers to include the new worker if no filters are active
+    if (!searchTerm && !location) {
+      setFilteredWorkers([...filteredWorkers, newWorker]);
+    }
     
     toast({
       title: "Worker Added",
       description: `${newWorker.name} has been added to the directory.`
     });
+    
+    // For debugging
+    console.log("Worker added:", newWorker);
+    console.log("Updated workers:", updatedWorkers);
   };
 
   return {

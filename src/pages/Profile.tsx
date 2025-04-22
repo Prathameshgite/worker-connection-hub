@@ -3,7 +3,7 @@ import React from 'react';
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, User } from "lucide-react";
+import { ArrowLeft, User, CreditCard } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -46,7 +46,24 @@ const Profile = () => {
               </div>
               <div>
                 <h3 className="text-sm font-medium text-muted-foreground mb-1">Account Created</h3>
-                <p className="font-medium">July 15, 2023</p>
+                <p className="font-medium">April 10, 2024</p>
+              </div>
+            </div>
+
+            <div className="pt-4 border-t">
+              <h3 className="text-lg font-medium mb-3">Payment Methods</h3>
+              <div className="flex items-center p-3 border rounded-md">
+                <CreditCard className="h-5 w-5 mr-3 text-muted-foreground" />
+                <div>
+                  <p className="font-medium">Credit/Debit Card</p>
+                  <p className="text-sm text-muted-foreground">Add a payment method to your account</p>
+                </div>
+                <Button 
+                  onClick={() => navigate('/payment')}
+                  className="ml-auto"
+                >
+                  Manage Payments
+                </Button>
               </div>
             </div>
           </CardContent>

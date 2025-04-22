@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useToast } from "@/hooks/use-toast";
 
@@ -196,7 +195,6 @@ export const useWorkers = () => {
   };
 
   const handleSearch = () => {
-    // Just trigger a re-filter with current terms
     const results = workers;
     setFilteredWorkers(
       workers.filter(worker => {
@@ -217,6 +215,10 @@ export const useWorkers = () => {
     setLocation('');
   };
 
+  const addWorker = (worker: Worker) => {
+    setWorkers(prevWorkers => [...prevWorkers, worker]);
+  };
+
   return {
     workers,
     filteredWorkers,
@@ -228,6 +230,7 @@ export const useWorkers = () => {
     handleAddReview,
     getCurrentLocation,
     handleSearch,
-    clearFilters
+    clearFilters,
+    addWorker
   };
 };

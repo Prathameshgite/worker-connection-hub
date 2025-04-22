@@ -7,11 +7,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MapPin, ArrowLeft } from "lucide-react";
+import { useWorkers } from "@/hooks/useWorkers";
 
 const AddWorker = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const [workers, setWorkers] = useState([]);
+  const { addWorker } = useWorkers();
   const [newWorker, setNewWorker] = useState({
     name: '',
     profession: '',
@@ -31,8 +32,6 @@ const AddWorker = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          // This is a simplified approach - in a real app you would use
-          // reverse geocoding to get the actual location name
           toast({
             title: "Location Found",
             description: "Using your current location for the worker profile.",
@@ -59,7 +58,7 @@ const AddWorker = () => {
   const handleAddWorker = (e) => {
     e.preventDefault();
     
-    // In a real application, this would call an API to save the worker
+    // Create a new worker with a unique ID
     const newId = Math.floor(Math.random() * 1000) + 1;
     const workerToAdd = { 
       ...newWorker, 
@@ -67,6 +66,9 @@ const AddWorker = () => {
       rating: parseFloat(newWorker.rating.toString()) || 4.0,
       reviews: []
     };
+    
+    // Add the worker to the global state using the useWorkers hook
+    addWorker(workerToAdd);
     
     toast({
       title: "Worker Added",

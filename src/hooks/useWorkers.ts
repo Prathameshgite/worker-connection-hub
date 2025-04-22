@@ -107,7 +107,7 @@ export const useWorkers = () => {
     return savedWorkers ? JSON.parse(savedWorkers) : defaultWorkers;
   });
   
-  const [filteredWorkers, setFilteredWorkers] = useState<Worker[]>([]);
+  const [filteredWorkers, setFilteredWorkers] = useState<Worker[]>(workers);
   const [searchTerm, setSearchTerm] = useState('');
   const [location, setLocation] = useState('');
 
@@ -221,10 +221,7 @@ export const useWorkers = () => {
   };
 
   const addWorker = (worker: Worker) => {
-    setWorkers(prevWorkers => {
-      const newWorkers = [...prevWorkers, worker];
-      return newWorkers;
-    });
+    setWorkers(prevWorkers => [...prevWorkers, worker]);
   };
 
   return {

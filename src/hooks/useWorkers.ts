@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useToast } from "@/hooks/use-toast";
 
@@ -104,6 +105,7 @@ export const useWorkers = () => {
   const { toast } = useToast();
   const [workers, setWorkers] = useState<Worker[]>(() => {
     const savedWorkers = localStorage.getItem('workers');
+    // If no saved workers, use default workers
     return savedWorkers ? JSON.parse(savedWorkers) : defaultWorkers;
   });
   
@@ -111,8 +113,11 @@ export const useWorkers = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [location, setLocation] = useState('');
 
+  // Persist workers to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem('workers', JSON.stringify(workers));
+    // Update filteredWorkers whenever workers change
+    setFilteredWorkers(workers);
   }, [workers]);
 
   useEffect(() => {
@@ -221,7 +226,19 @@ export const useWorkers = () => {
   };
 
   const addWorker = (worker: Worker) => {
-    setWorkers(prevWorkers => [...prevWorkers, worker]);
+    // Ensure the new worker has a unique ID
+    const newWorker = {
+      ...worker,
+      id: workers.length > 0 ? Math.max(...workers.map(w => w.id)) + 1 : 1
+    };
+    
+    // Add the worker and trigger re-render
+    setWorkers(prevWorkers => [...prevWorkers, newWorker]);
+    
+    toast({
+      title: "Worker Added",
+      description: `${newWorker.name} has been added to the directory.`
+    });
   };
 
   return {

@@ -20,94 +20,99 @@ export interface Worker {
   reviews: Review[];
 }
 
+const defaultWorkers = [
+  { 
+    id: 1, 
+    name: 'Rajesh Kumar', 
+    profession: 'Plumber', 
+    location: 'Koregaon Park, Pune', 
+    rating: 4.8, 
+    phone: '98765-43210', 
+    email: 'rajesh@example.com',
+    reviews: [
+      { id: 1, userName: 'Ananya Sharma', rating: 5, comment: 'Excellent work, fixed my sink in no time!', date: '2023-05-15' },
+      { id: 2, userName: 'Vikram Singh', rating: 4.5, comment: 'Very professional and reasonably priced.', date: '2023-04-22' }
+    ]
+  },
+  { 
+    id: 2, 
+    name: 'Priya Patel', 
+    profession: 'Electrician', 
+    location: 'Kothrud, Pune', 
+    rating: 4.9, 
+    phone: '87654-32109', 
+    email: 'priya@example.com',
+    reviews: [
+      { id: 1, userName: 'Arjun Mehta', rating: 5, comment: 'Fantastic work rewiring my home office.', date: '2023-06-10' },
+      { id: 2, userName: 'Deepika Reddy', rating: 4.8, comment: 'Very knowledgeable and efficient.', date: '2023-05-28' }
+    ]
+  },
+  { 
+    id: 3, 
+    name: 'Suresh Iyer', 
+    profession: 'Carpenter', 
+    location: 'Aundh, Pune', 
+    rating: 4.7, 
+    phone: '76543-21098', 
+    email: 'suresh@example.com',
+    reviews: [
+      { id: 1, userName: 'Ravi Verma', rating: 4.5, comment: 'Built a beautiful custom bookshelf for my living room.', date: '2023-04-15' }
+    ]
+  },
+  { 
+    id: 4, 
+    name: 'Meera Gupta', 
+    profession: 'Painter', 
+    location: 'Viman Nagar, Pune', 
+    rating: 4.5, 
+    phone: '65432-10987', 
+    email: 'meera@example.com',
+    reviews: [
+      { id: 1, userName: 'Karthik Nair', rating: 4.5, comment: 'Great attention to detail and clean work.', date: '2023-03-20' },
+      { id: 2, userName: 'Nisha Joshi', rating: 4.5, comment: 'Very pleased with the quality of work.', date: '2023-02-18' }
+    ]
+  },
+  { 
+    id: 5, 
+    name: 'Amit Sharma', 
+    profession: 'HVAC Technician', 
+    location: 'Kalyani Nagar, Pune', 
+    rating: 4.6, 
+    phone: '54321-09876', 
+    email: 'amit@example.com',
+    reviews: [
+      { id: 1, userName: 'Sanjay Kapoor', rating: 4.8, comment: 'Fixed my AC during a heatwave, lifesaver!', date: '2023-07-02' },
+      { id: 2, userName: 'Pooja Malhotra', rating: 4.3, comment: 'Good service but arrived a bit late.', date: '2023-06-15' }
+    ]
+  },
+  { 
+    id: 6, 
+    name: 'Kavita Desai', 
+    profession: 'Landscaper', 
+    location: 'Baner, Pune', 
+    rating: 4.8, 
+    phone: '43210-98765', 
+    email: 'kavita@example.com',
+    reviews: [
+      { id: 1, userName: 'Rahul Khanna', rating: 5, comment: 'Transformed my garden into something beautiful!', date: '2023-05-10' },
+      { id: 2, userName: 'Aisha Choudhary', rating: 4.6, comment: 'Great design ideas and implementation.', date: '2023-04-25' }
+    ]
+  }
+];
+
 export const useWorkers = () => {
   const { toast } = useToast();
-  const [workers, setWorkers] = useState<Worker[]>([
-    { 
-      id: 1, 
-      name: 'Rajesh Kumar', 
-      profession: 'Plumber', 
-      location: 'Koregaon Park, Pune', 
-      rating: 4.8, 
-      phone: '98765-43210', 
-      email: 'rajesh@example.com',
-      reviews: [
-        { id: 1, userName: 'Ananya Sharma', rating: 5, comment: 'Excellent work, fixed my sink in no time!', date: '2023-05-15' },
-        { id: 2, userName: 'Vikram Singh', rating: 4.5, comment: 'Very professional and reasonably priced.', date: '2023-04-22' }
-      ]
-    },
-    { 
-      id: 2, 
-      name: 'Priya Patel', 
-      profession: 'Electrician', 
-      location: 'Kothrud, Pune', 
-      rating: 4.9, 
-      phone: '87654-32109', 
-      email: 'priya@example.com',
-      reviews: [
-        { id: 1, userName: 'Arjun Mehta', rating: 5, comment: 'Fantastic work rewiring my home office.', date: '2023-06-10' },
-        { id: 2, userName: 'Deepika Reddy', rating: 4.8, comment: 'Very knowledgeable and efficient.', date: '2023-05-28' }
-      ]
-    },
-    { 
-      id: 3, 
-      name: 'Suresh Iyer', 
-      profession: 'Carpenter', 
-      location: 'Aundh, Pune', 
-      rating: 4.7, 
-      phone: '76543-21098', 
-      email: 'suresh@example.com',
-      reviews: [
-        { id: 1, userName: 'Ravi Verma', rating: 4.5, comment: 'Built a beautiful custom bookshelf for my living room.', date: '2023-04-15' }
-      ]
-    },
-    { 
-      id: 4, 
-      name: 'Meera Gupta', 
-      profession: 'Painter', 
-      location: 'Viman Nagar, Pune', 
-      rating: 4.5, 
-      phone: '65432-10987', 
-      email: 'meera@example.com',
-      reviews: [
-        { id: 1, userName: 'Karthik Nair', rating: 4.5, comment: 'Great attention to detail and clean work.', date: '2023-03-20' },
-        { id: 2, userName: 'Nisha Joshi', rating: 4.5, comment: 'Very pleased with the quality of work.', date: '2023-02-18' }
-      ]
-    },
-    { 
-      id: 5, 
-      name: 'Amit Sharma', 
-      profession: 'HVAC Technician', 
-      location: 'Kalyani Nagar, Pune', 
-      rating: 4.6, 
-      phone: '54321-09876', 
-      email: 'amit@example.com',
-      reviews: [
-        { id: 1, userName: 'Sanjay Kapoor', rating: 4.8, comment: 'Fixed my AC during a heatwave, lifesaver!', date: '2023-07-02' },
-        { id: 2, userName: 'Pooja Malhotra', rating: 4.3, comment: 'Good service but arrived a bit late.', date: '2023-06-15' }
-      ]
-    },
-    { 
-      id: 6, 
-      name: 'Kavita Desai', 
-      profession: 'Landscaper', 
-      location: 'Baner, Pune', 
-      rating: 4.8, 
-      phone: '43210-98765', 
-      email: 'kavita@example.com',
-      reviews: [
-        { id: 1, userName: 'Rahul Khanna', rating: 5, comment: 'Transformed my garden into something beautiful!', date: '2023-05-10' },
-        { id: 2, userName: 'Aisha Choudhary', rating: 4.6, comment: 'Great design ideas and implementation.', date: '2023-04-25' }
-      ]
-    }
-  ]);
+  const [workers, setWorkers] = useState<Worker[]>(() => {
+    const savedWorkers = localStorage.getItem('workers');
+    return savedWorkers ? JSON.parse(savedWorkers) : defaultWorkers;
+  });
   
   const [filteredWorkers, setFilteredWorkers] = useState<Worker[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [location, setLocation] = useState('');
 
   useEffect(() => {
-    setFilteredWorkers(workers);
+    localStorage.setItem('workers', JSON.stringify(workers));
   }, [workers]);
 
   useEffect(() => {
@@ -216,7 +221,10 @@ export const useWorkers = () => {
   };
 
   const addWorker = (worker: Worker) => {
-    setWorkers(prevWorkers => [...prevWorkers, worker]);
+    setWorkers(prevWorkers => {
+      const newWorkers = [...prevWorkers, worker];
+      return newWorkers;
+    });
   };
 
   return {

@@ -1,4 +1,4 @@
- me to your Lovable project
+ e to your Lovable project
 
 ## Project info
 

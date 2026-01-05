@@ -1,4 +1,4 @@
- Lov
+ Lo
 
 ## Project info
 

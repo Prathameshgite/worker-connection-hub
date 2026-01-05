@@ -1,4 +1,4 @@
- Lo
+ L
 
 ## Project info
 

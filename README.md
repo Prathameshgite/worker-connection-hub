@@ -1,4 +1,4 @@
- Lovable proj
+ Lovable pr
 
 ## Project info
 
